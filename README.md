@@ -1,79 +1,76 @@
-fluent-sql
+fluentsql
 ==========
 
 A minimalistic Fluent SQL API for Java aimed to resemble the code to your original SQL code
 
-Example Usage: 
-
-  A complex query:
-  
-	   WITH LatestOrders AS
-	  ( SELECT MAX (ID)
-	   FROM dbo.Orders
-	   GROUP BY CustomerID )
-	SELECT Customers.*,
-	       Orders.OrderTime AS LatestOrderTime,
-	
-	  (SELECT COUNT (*)
-	   FROM dbo.OrderItems
-	   WHERE OrderID IN
-	       (SELECT ID
-	        FROM dbo.Orders
-	        WHERE CustomerID = Customers.ID)) AS TotalItemsPurchased
-	FROM dbo.Customers
-	INNER JOIN dbo.Orders ON Customers.ID = Orders.CustomerID
-	WHERE Orders.ID IN
-	    (SELECT ID
-	     FROM LatestOrders)
+ 
      
 Using String concatenation:
   
-  	String sql = 		" WITH LatestOrders AS (" +
-				"		SELECT MAX ( ID ) " +
-				"			FROM dbo.Orders " +
+  	String sql =
+				" WITH LatestOrders AS (" +
+				"		SELECT CustomerName , "+
+				"				SUM ( COUNT ( ID ) ) ," +
+				"				COUNT ( MAX ( n_items ) ) , " +
+				"				Red as color" +
+				"			FROM dbo.Orders" +
+				"			RIGHT JOIN Customers" +
+				"				on Orders.Customer_ID = Customers.ID " +
+				"			LEFT JOIN Persons" +
+				"				ON Persons.name = Customer.name" +
+				"				AND Persons.lastName = Customer.lastName" +
 				"			GROUP BY CustomerID" +
 				"		) "+
-				" SELECT "+
-				"    Customers.*, "+
-				"    Orders.OrderTime AS LatestOrderTime, "+
+				"  SELECT "+
+				"    Customers.* , "+
+				"    Orders.OrderTime AS LatestOrderTime , "+
 				"    ( SELECT COUNT ( * ) " +
 				"		FROM dbo.OrderItems " +
 				"		WHERE OrderID IN "+
-				"        ( SELECT ID FROM dbo.Orders WHERE CustomerID = Customers.ID ) ) "+
-				"            AS TotalItemsPurchased "+
+				"        ( SELECT ID FROM dbo.Orders WHERE CustomerID = Customers.ID )  "+
+				"      )      AS TotalItemsPurchased "+
 				" FROM dbo.Customers " +
 				" INNER JOIN dbo.Orders "+
-				"        ON Customers.ID = Orders.CustomerID "+
+				"        USING ID" +
 				" WHERE "+
-				"    Orders.ID IN ( SELECT ID FROM LatestOrders )";
+				"   Orders.ID IN ( SELECT ID FROM LatestOrders )"+
+				"	AND Orders.n_items > ? ";
   
   
 In fluent SQL:
   
-    	String actual = new SQL()
-			.WITH("LatestOrders", 
-					new SQL().SELECT()
-							.MAX("ID")
+    SQL sql = WITH("LatestOrders" , 
+							SELECT("CustomerName")
+							.FN(SUM(COUNT("ID")))
+							.FN(COUNT(MAX("n_items")))
+							.FIELD("Red").AS("color")
 							.FROM("dbo.Orders")
+							.RIGHT_JOIN("Customers")
+								.ON("Orders.customer_ID" , "Customers.ID")
+							.LEFT_JOIN("Persons")
+								.ON("Persons.name" , "Customer.name")
+								.AND_ON("Persons.lastName" , "Customer.lastName")
 							.GROUP_BY("CustomerID")
 			)
-			.SELECT()
+			.append(SELECT()
 				.FIELD("Customers.*")
 				.FIELD("Orders.OrderTime").AS("LatestOrderTime")
-				.FIELD(new SQL().SELECT().COUNT("*")
+				.FIELD(SELECT(COUNT("*"))
 							.FROM("dbo.OrderItems")
-							.WHERE("OrderID").IN(new SQL()
-										.SELECT("ID")
+							.WHERE("OrderID").IN(
+									SELECT("ID")
 										.FROM("dbo.Orders")
 										.WHERE("CustomerID").EQUAL_TO_FIELD("Customers.ID"))
 							
 						).AS("TotalItemsPurchased")
 				.FROM("dbo.Customers")
 				.INNER_JOIN("dbo.Orders")
-					.ON("Customers.ID", "Orders.CustomerID")
-				.WHERE("Orders.ID").IN(new SQL()
-							.SELECT("ID").FROM("LatestOrders"))
-			.build().sql;
+					.USING("ID")
+				.WHERE("Orders.ID").IN(SELECT("ID").FROM("LatestOrders"))
+				.AND("Orders.n_items").GREATER_THAN(0)
+				);
+		
+		Breakdown actual = sql.build();
       
       
 
@@ -94,118 +91,12 @@ link to comments
 
 https://news.ycombinator.com/item?id=5956867
 
-Updates from HN suggestions:
 
-Usage of Static methods
-
-		...
-	
-		public static SQL WITH(String name, SQL sql){
-			return new SQL().WITH(name, sql);
-		}
-		public static SQL SELECT(){
-			return new SQL().SELECT();
-		}
-		public static SQL COUNT(String column){
-			return new SQL().COUNT(column);
-		}
-		public static SQL COUNT(SQL sql){
-			return new SQL().COUNT(sql);
-		}
-		public static SQL SUM(String column){
-			return new SQL().SUM(column);
-		}
-		public static SQL SUM(SQL sql){
-			return new SQL().SUM(sql);
-		}
-		....
-
-A more complex example with nested functions
-
-		String expected =
-				" SELECT "+
-				"		( SELECT SUM ( COUNT ( ID ) )," +
-				"				COUNT ( MAX ( n_items ) ), " +
-				"				CustomerName " +
-				"			FROM dbo.Orders" +
-				"			RIGHT JOIN Customers" +
-				"				on Orders.Customer_ID = Customers.ID " +
-				"			LEFT JOIN Persons" +
-				"				ON Persons.name = Customer.name" +
-				"				AND Persons.lastName = Customer.lastName" +
-				"			GROUP BY CustomerID " +
-				"		) AS LatestOrders," +
-				"    Customers.*, "+
-				"    Orders.OrderTime AS LatestOrderTime, "+
-				"    ( SELECT COUNT ( * ) " +
-				"		FROM dbo.OrderItems " +
-				"		WHERE OrderID IN "+
-				"        ( SELECT ID FROM dbo.Orders WHERE CustomerID = Customers.ID ) ) "+
-				"            AS TotalItemsPurchased "+
-				" FROM dbo.Customers " +
-				" INNER JOIN dbo.Orders "+
-				"        USING ID" +
-				" WHERE "+
-				"	Orders.n_items > ? "+
-				"   AND Orders.ID IN ( SELECT ID FROM LatestOrders )" +
-				"	ORDER BY ID DESC " +
-				" LIMIT 100 " +
-				" OFFSET 20" ;
-
-		...	
-	
-In Fluent SQL
-	
-		import static com.ivanceras.fluent.StaticSQL.*;
-		...
-	
-		Breakdown actual = 
-			SELECT()
-				.FIELD(SELECT("CustomerName")
-							.SUM(COUNT("ID"))
-							.COUNT(MAX("n_items"))
-							.FROM("dbo.Orders")
-							.RIGHT_JOIN("Customers")
-								.ON("Orders.customer_ID", "Customers.ID")
-							.LEFT_JOIN("Persons")
-								.ON("Persons.name", "Customer.name")
-								.AND("Persons.lastName", "Customer.lastName")
-							.GROUP_BY("CustomerID")
-				).AS("LatestOrders")
-				.FIELD("Customers.*")
-				.FIELD("Orders.OrderTime").AS("LatestOrderTime")
-				.FIELD(SELECT().COUNT("*")
-							.FROM("dbo.OrderItems")
-							.WHERE("OrderID").IN(
-										SELECT("ID")
-										.FROM("dbo.Orders")
-										.WHERE("CustomerID").EQUAL_TO_FIELD("Customers.ID"))
-							
-						).AS("TotalItemsPurchased")
-				.FROM("dbo.Customers")
-				.INNER_JOIN("dbo.Orders")
-					.USING("ID")
-				.WHERE("Orders.n_items").GREATER_THAN(0)
-				.AND("Orders.ID").IN(SELECT("ID").FROM("LatestOrders"))
-				.ORDER_BY("ID").DESC()
-				.LIMIT(100)
-				.OFFSET(20)
-			.build();
-		...
-				CTest.cassertEquals(expected, actual.getSql());
-		...
-	
-Notice the nested functions?
-
-			.SUM(COUNT("ID"))
-            .COUNT(MAX("n_items"))
-            
-Yes, you can have as many nested functions as you require.
 
 More examples
 -------------
 
-https://github.com/ivanceras/fluent-sql/tree/master/test/com/ivanceras/fluent
+https://github.com/ivanceras/fluentsql/tree/master/src/test/java/com/ivanceras/fluent
 
 
 Similar Projects
