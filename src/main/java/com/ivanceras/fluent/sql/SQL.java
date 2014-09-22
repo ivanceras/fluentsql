@@ -51,7 +51,7 @@ public class SQL {
 	public static SQL DROP_TABLE() {
 		return DROP().keyword("TABLE");
 	}
-	
+
 	public static SQL DROP_TABLE(String table) {
 		return DROP().TABLE(table);
 	}
@@ -137,23 +137,23 @@ public class SQL {
 	public static SQL WITH_RECURSIVE(String queryName, SQL sql){
 		return WITH_RECURSIVE(queryName).AS().FIELD(sql);
 	}
-	private List<Object> keywords = new LinkedList<Object>();// can be string and SQL
-	private List<Object> values = new LinkedList<Object>();
-	int tabs = 0;
+	private final String FIELD = "FIELD";
+	private final String FUNCTION = "FUNCTION";
+	private final String KEYWORD = "KEYWORD";
 
-	boolean smartMode = true;//if on smart mode, adds commas, and parenthesis automatically if possible.
+	private List<Object> keywords = new LinkedList<Object>();// can be string and SQL
 
 	String lastCall = null;
 
-	private final String KEYWORD = "KEYWORD";
-
-	private final String FUNCTION = "FUNCTION";
-
-	private final String FIELD = "FIELD";
+	boolean smartMode = true;//if on smart mode, adds commas, and parenthesis automatically if possible.
 
 	private final String TABLE = "TABLE";
 
+	int tabs = 0;
+
 	private final String VALUE = "VALUE";
+
+	private List<Object> values = new LinkedList<Object>();
 
 	public SQL ADD(){
 		return keyword("ADD");
@@ -207,14 +207,15 @@ public class SQL {
 	public Breakdown build(Breakdown bk, SQL passed){
 		List<Object> passedKeywords = passed.keywords;
 		List<Object> passedValues = passed.values;
-
 		for(Object keyword : passedKeywords){
-			Class<?> keyClass = keyword.getClass();
-			if(keyClass.equals(String.class)){
-				bk.appendSp((String)keyword);
-			}
-			else if(keyClass.equals(SQL.class)){
-				build(bk, (SQL)keyword);
+			if(keyword != null){
+				Class<?> keyClass = keyword.getClass();
+				if(keyClass.equals(String.class)){
+					bk.appendSp((String)keyword);
+				}
+				else if(keyClass.equals(SQL.class)){
+					build(bk, (SQL)keyword);
+				}
 			}
 		}
 		for(Object value : passedValues){
@@ -328,9 +329,16 @@ public class SQL {
 		return this;
 	}
 
-	private SQL smartCommaFnField(){
-		if(smartMode && lastCall != null && (lastCall.equals(FIELD) || lastCall.equals(FUNCTION))){
-			comma();
+	public SQL FIELD(String keyword){
+		smartCommaFnField();
+		keyword(keyword);
+		lastCall = FIELD;
+		return this;
+	}
+
+	public SQL FIELD(String... columns){
+		for(String col : columns){
+			FIELD(col);
 		}
 		return this;
 	}
@@ -346,27 +354,13 @@ public class SQL {
 		lastCall = FUNCTION;
 		return this;
 	}
-
-	public SQL FIELD(String keyword){
-		smartCommaFnField();
-		keyword(keyword);
-		lastCall = FIELD;
-		return this;
-	}
-	public SQL FIELD(String... columns){
-		for(String col : columns){
-			FIELD(col);
-		}
-		return this;
-	}
-
 	public SQL FOR(){
 		return keyword("FOR");
 	}
+
 	public SQL FOREIGN_KEY(String...columns){
 		return keyword("FOREIGN KEY").FIELD(columns).ln();
 	}
-
 	public SQL FROM(){
 		return keyword("FROM");
 	}
@@ -389,6 +383,7 @@ public class SQL {
 		}
 		return FROM(tableList.toArray(new String[tableList.size()]));
 	}
+
 	public SQL FROM(String[] tables){
 		FROM();
 		for(String tbl : tables){
@@ -396,11 +391,10 @@ public class SQL {
 		}
 		return this;
 	}
-
-
 	public SQL FULL_OUTER_JOIN(String table){
 		return keyword("FULL OUTER JOIN").FIELD(table).ln();
 	}
+
 
 	public SQL function(String function, SQL sql){
 		keyword(function);
@@ -437,13 +431,14 @@ public class SQL {
 	public SQL GREATER_THAN(SQL sql){
 		return keyword(">").FIELD(sql);
 	}
+
 	public SQL GREATER_THAN_OR_EQUAL(Object value){
 		return keyword(">=").VALUE(value);
 	}
-
 	public SQL GROUP_BY(SQL sql){
 		return keyword("GROUP BY").FN(sql);
 	}
+
 	public SQL GROUP_BY(String... column){
 		return keyword("GROUP BY").FIELD(column);
 	}
@@ -464,7 +459,6 @@ public class SQL {
 	public SQL IF_NOT_EXIST(){
 		return keyword("IF NOT EXIST");
 	}
-
 	public SQL IN(Object... value){
 		keyword("IN");
 		openParen();
@@ -480,10 +474,10 @@ public class SQL {
 	public SQL IN(SQL sql){
 		return keyword("IN").FIELD(sql);
 	}
+
 	public SQL INDEX(String indexName, String columns){
 		return keyword("INDEX").keyword(indexName).FIELD(columns);
 	}
-
 	public SQL INHERITS(String table){
 		return keyword("INHERITS").openParen().FIELD(table).closeParen();
 	}
@@ -505,10 +499,10 @@ public class SQL {
 		lastCall = TABLE;
 		return this;
 	}
+
 	public SQL IS_NOT_NULL(){
 		return keyword("IS NOT NULL");
 	}
-
 	public SQL IS_NULL(){
 		return keyword("IS NULL");
 	}
@@ -530,29 +524,30 @@ public class SQL {
 	public SQL LESS_THAN(Object value){
 		return keyword("<").VALUE(value);
 	}
+
 	public SQL LESS_THAN(SQL sql){
 		return keyword("<").FIELD(sql);
 	}
 	public SQL LESS_THAN_OR_EQUAL(Object value){
 		return keyword("<").EQUAL().VALUE(value);
 	}
-
 	public SQL LIMIT(int limit){
 		return keyword("LIMIT").keyword(limit+"");
 	}
 
 	public SQL ln(){
-		return keyword("\n");
+//		return keyword("\n");
+		return this;
 	}
 
 	public SQL MATCH_FULL(){
 		return keyword("MATCH FULL").ln();
 	}
 
-
 	public SQL MATCH_SIMPLE(){
 		return keyword("MATCH SIMPLE").ln();
 	}
+
 
 	public SQL NOT_EQUAL_TO(Object value){
 		return keyword("!=").VALUE(value);
@@ -567,6 +562,7 @@ public class SQL {
 		FIELD(sql);
 		return this;
 	}
+
 	public SQL NOT_IN(Object... value){
 		keyword("NOT IN");
 		openParen();
@@ -578,7 +574,6 @@ public class SQL {
 		closeParen();
 		return this;
 	}
-
 	public SQL NOT_IN(SQL sql){
 		keyword("NOT IN");
 		FIELD(sql);
@@ -596,6 +591,7 @@ public class SQL {
 	public SQL ON(String column1){
 		return keyword("ON").FIELD(column1);
 	}
+
 	public SQL ON(String column1, String column2){
 		return keyword("ON").FIELD(column1).EQUAL().FIELD(column2).ln();
 	}
@@ -605,10 +601,10 @@ public class SQL {
 	public SQL ON_UPDATE(){
 		return keyword("ON UPDATE").ln();
 	}
-
 	public SQL ONLY(){
 		return keyword("ONLY");
 	}
+
 	public SQL openParen(){
 		lastCall = "_OPEN_PAREN_";
 		return chars("(");
@@ -630,16 +626,15 @@ public class SQL {
 	public SQL PRIMARY_KEY(String...columns){
 		return keyword("PRIMARY KEY").openParen().FIELD(columns).closeParen().ln();
 	}
-
 	public SQL REFERENCES(String table, String column){
 		return keyword("REFERENCES").ln()
 				.FIELD(table)
 				.openParen().FIELD(column).ln().closeParen();
 	}
+
 	public SQL RENAME(){
 		return keyword("RENAME");
 	}
-
 	public SQL RENAME_TO(String table){
 		return RENAME().TO(table);
 	}
@@ -659,6 +654,7 @@ public class SQL {
 	public SQL SCHEMA(){
 		return keyword("SCHEMA").ln();
 	}
+
 	public SQL SCHEMA(String schema){
 		return SCHEMA().FIELD(schema);
 	}
@@ -670,6 +666,12 @@ public class SQL {
 	}
 	public SQL SET(String field, Object value) {
 		return SET().FIELD(field).EQUAL(value);
+	}
+	private SQL smartCommaFnField(){
+		if(smartMode && lastCall != null && (lastCall.equals(FIELD) || lastCall.equals(FUNCTION))){
+			comma();
+		}
+		return this;
 	}
 	public SQL tab(){
 		tabs++;
@@ -767,5 +769,10 @@ public class SQL {
 
 	public SQL WHERE(String column){
 		return WHERE().FIELD(column);
+	}
+
+	@Override
+	public String toString(){
+		return "SQL: keywords["+keywords.size()+"]";
 	}
 }
