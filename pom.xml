@@ -17,7 +17,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:ivanceras/fluentsql.git</connection>
 		<developerConnection>scm:git:git@github.com:ivanceras/fluentsql.git</developerConnection>
-		<url>https://github.com/ivanceras/fluentsql.git</url>
+		<url>scm:git:https://github.com/ivanceras/fluentsql.git</url>
 	</scm>
 
 	<properties>
