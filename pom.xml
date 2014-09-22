@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 
 	<parent>
 		<groupId>com.ivanceras</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.4-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -14,11 +15,10 @@
 	<description>Fluent SQL</description>
 
 	<scm>
-		<connection>scm:git:git@github.com:ivanceras/fluentsql.git</connection>
-		<developerConnection>scm:git:git@github.com:ivanceras/fluentsql.git</developerConnection>
+		<connection>scm:git:https://github.com/ivanceras/fluentsql.git</connection>
+		<developerConnection>scm:git:https://github.com/ivanceras/fluentsql.git</developerConnection>
 		<url>scm:git:https://github.com/ivanceras/fluentsql.git</url>
-	  <tag>fluentsql-0.0.4</tag>
-  </scm>
+	</scm>
 
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
