@@ -2,6 +2,10 @@
 language: java
 
 before_install:
+ - git clone https://github.com/ivanceras/parent.git
+ - cd parent
+ - mvn clean install
+ - cd ../
  - git clone https://github.com/ivanceras/commons.git
  - cd commons
  - mvn clean install
