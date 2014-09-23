@@ -1,6 +1,8 @@
 fluentsql
 ==========
 
+[![Build Status](https://api.travis-ci.org/ivanceras/fluentsql.svg)](https://travis-ci.org/ivanceras/fluentsql)
+
 A minimalistic Fluent SQL API for Java aimed to resemble the code to your original SQL code
 
  
