@@ -4,8 +4,11 @@ language: java
 before_install:
  - git clone https://github.com/ivanceras/parent.git
  - cd parent
- - mvn clean install
+ - mvn clean install -Dgpg.skip=true
  - cd ../
  - git clone https://github.com/ivanceras/commons.git
  - cd commons
- - mvn clean install
+ - mvn clean install -Dgpg.skip=true
+
+install: 
+ - mvn clean install -Dgpg.skip=true
