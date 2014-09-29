@@ -13,6 +13,11 @@ import java.util.List;
 public class SQL {
 	
 	
+	/**
+	 * Provides a convenient way to use Static methods such as SELECTs and Aggreate Functions i.e. min,max,lower,upper
+	 * @author lee
+	 *
+	 */
 	public static class Statics{
 		
 		public static SQL instance(){
