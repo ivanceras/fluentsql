@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.ivanceras.fluent.sql.Breakdown;
 import com.ivanceras.fluent.sql.SQL;
-import static com.ivanceras.fluent.sql.SQL.*;
+import static com.ivanceras.fluent.sql.SQL.Statics.*;
 
 
 public class TestSQLBuilderWithRecursive {

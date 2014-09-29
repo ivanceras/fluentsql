@@ -1,6 +1,6 @@
 package com.ivanceras.fluent;
 
-import static com.ivanceras.fluent.sql.SQL.*;
+import static com.ivanceras.fluent.sql.SQL.Statics.*;
 import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Test;

@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.ivanceras.fluent.sql.SQL;
 
-import static com.ivanceras.fluent.sql.SQL.*;
+import static com.ivanceras.fluent.sql.SQL.Statics.*;
 
 
 
@@ -68,8 +68,7 @@ public class TestComplexQuery {
 				" WHERE "+
 				"    Orders.ID IN ( SELECT ID FROM LatestOrders ) ";
 		
-		SQL sql  = 
-				WITH("LatestOrders",SELECT(MAX("ID"))
+		SQL sql  = WITH("LatestOrders",SELECT(MAX("ID"))
 							.FROM("dbo.Orders")
 							.GROUP_BY("CustomerID")
 					)
