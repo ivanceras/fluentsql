@@ -775,8 +775,11 @@ public class SQL {
 		return keyword("OR").FIELD(column);
 
 	}
+	public SQL ORDER_BY(){
+		return keyword("ORDER BY");
+	}
 	public SQL ORDER_BY(String... field){
-		keyword("ORDER BY");
+		ORDER_BY();
 		for(String f : field){
 			FIELD(f);
 		}
