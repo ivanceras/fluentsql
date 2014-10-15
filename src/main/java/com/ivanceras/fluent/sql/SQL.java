@@ -524,7 +524,7 @@ public class SQL {
 		return keyword("FOREIGN KEY").FIELD(columns).ln();
 	}
 	public SQL FROM(){
-		return keyword("FROM");
+		return keyword("\n FROM");
 	}
 
 	public SQL FROM(SQL sql){
@@ -634,7 +634,7 @@ public class SQL {
 	}
 
 	public SQL IN(SQL sql){
-		return keyword("IN").FIELD(sql);
+		return keyword("\n IN").FIELD(sql);
 	}
 
 	public SQL INDEX(String indexName, String columns){
@@ -676,11 +676,11 @@ public class SQL {
 	}
 
 	public SQL LEFT_JOIN(String table){
-		return keyword("LEFT JOIN").FIELD(table).ln();
+		return keyword("\n LEFT JOIN").FIELD(table).ln();
 	}
 
 	public SQL LEFT_OUTER_JOIN(String table){
-		return keyword("LEFT OUTER JOIN").FIELD(table).ln();
+		return keyword("\n LEFT OUTER JOIN").FIELD(table).ln();
 	}
 
 	public SQL LESS_THAN(Object value){
@@ -925,7 +925,7 @@ public class SQL {
 
 
 	public SQL WHERE(){
-		return keyword("WHERE");
+		return keyword("\n WHERE");
 	}
 
 	public SQL WHERE(SQL sql){
