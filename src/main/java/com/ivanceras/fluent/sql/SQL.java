@@ -521,7 +521,11 @@ public class SQL {
 	}
 
 	public SQL FOREIGN_KEY(String...columns){
-		return keyword("FOREIGN KEY").FIELD(columns).ln();
+		return keyword("FOREIGN KEY")
+				.openParen()
+				.FIELD(columns)
+				.closeParen()
+				.ln();
 	}
 	public SQL FROM(){
 		return keyword("\n FROM");
@@ -936,8 +940,20 @@ public class SQL {
 		return WHERE().FIELD(column);
 	}
 
+	public SQL DEFERRABLE() {
+		return keyword("\n DEFERRABLE");
+	}
+	
+	public SQL INITIALLY_DEFERRED() {
+		return keyword("INITIALLY DEFERRED");
+	}
+	
 	@Override
 	public String toString(){
 		return "SQL: keywords["+keywords.size()+"]";
 	}
+
+	
+
+	
 }
