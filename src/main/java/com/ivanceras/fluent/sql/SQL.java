@@ -388,6 +388,9 @@ public class SQL {
 	public SQL CASCADE(){
 		return keyword("CASCADE");
 	}
+	public SQL RESTRICT(){
+		return keyword("RESTRICT");
+	}
 	public SQL CASE(){
 		return keyword("CASE");
 	}
@@ -792,8 +795,11 @@ public class SQL {
 	public SQL PARTITION_BY(String... columns){
 		return keyword("PARTITION BY").FIELD(columns);
 	}
+	public SQL PRIMARY_KEY(){
+		return keyword("PRIMARY KEY");
+	}
 	public SQL PRIMARY_KEY(String...columns){
-		return keyword("PRIMARY KEY").openParen().FIELD(columns).closeParen().ln();
+		return PRIMARY_KEY().openParen().FIELD(columns).closeParen().ln();
 	}
 	public SQL REFERENCES(String table, String column){
 		return keyword("REFERENCES").ln()
