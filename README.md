@@ -3,11 +3,11 @@ fluentsql
 
 [![Build Status](https://api.travis-ci.org/ivanceras/fluentsql.svg)](https://travis-ci.org/ivanceras/fluentsql)
 
-A minimalistic Fluent SQL API for Java aimed to resemble the code to your original SQL code
+A minimalistic Fluent SQL API for Java aimed to resemble the code to your original SQL code.
 
- 
      
-Using String concatenation:
+##Example
+ * Writing SQL code using string concatentation in Java
 
 ````java
   	String sql =
@@ -41,7 +41,7 @@ Using String concatenation:
   
 ````
 
-In fluent SQL:
+* In fluent SQL:
 
 ````java
 
@@ -79,8 +79,19 @@ In fluent SQL:
 		Breakdown actual = sql.build();
       
 ````      
+## What it is:
+ * A clever usage of Java Static methods to write your SQL statement just as what you would expect.
+ * Easily write your SQL in java.
+ * It has almost no logic other than appending the SQL statements just like StringBuilder, and appending commas when it is obvious.
+ 
 
-TODO: need ORM version here
+## What it is NOT
+ * It is not an automatic SQL builder that will automagically transform SQL strings to work accross multi-database platform
+ 
+## What it is used for
+ * It is used by programmers who would rather write SQL statements than use ORM that gets in their way.  
+ 
+
 
 ### Features
 
@@ -93,9 +104,42 @@ A SQL breakdown result:
 
 
 
+## The keyword `SUPER AWESOME JOIN` that I want to use is not there.
+
+ * You can use the keyword API
+ 	
+ ```java
+ SQL = SELECT("name", "description").FROM("mytable").
+ 			keyword(" SUPER AWESOME JOIN ").append("table3")
+ 			.ON("column1", "column2");
+ ```
+ 
+ * You can incorporate it into the [SQL.java](https://github.com/ivanceras/fluentsql/blob/master/src/main/java/com/ivanceras/fluent/sql/SQL.java) class
+
+### Usage
+
+* Simplest Usage:
+>Copy these 2 files [here](https://github.com/ivanceras/fluentsql/tree/master/src/main/java/com/ivanceras/fluent/sql).
+  Make it as part of your source code, so you can easily modify and add keywords intended for your Database platform.
+ 
+
+* Maven project, If you are just using keywords that are already in there!
+
+```xml
+
+<dependency>
+	<groupId>com.ivanceras</groupId>
+	<artifactId>fluentsql</artifactId>
+	<version>0.0.6</version>
+</dependency>
+
+```
+
+    
 
 
-link to comments
+
+link to previous HN comments submission
 
 https://news.ycombinator.com/item?id=5956867
 
@@ -110,7 +154,7 @@ https://github.com/ivanceras/fluentsql/tree/master/src/test/java/com/ivanceras/f
 #### Similar Projects
 
 
-http://www.jooq.org/  ( This is polished but I wanted CAPSLOCK on the SQL keywords )
+http://www.jooq.org/  ( This is polished but I wanted CAPSLOCK on the SQL keywords, also it automatically transform SQL statements for each platform )
 
 http://code.google.com/p/squiggle-sql/  ( ..uhmm.. poor choice of words.. )
 
