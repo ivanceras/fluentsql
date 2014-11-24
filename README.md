@@ -86,10 +86,11 @@ A minimalistic Fluent SQL API for Java aimed to resemble the code to your origin
  
 
 ## What it is NOT
- * It is not an automatic SQL builder that will automagically transform SQL strings to work accross multi-database platform
+ * It is not an automatic SQL builder that will automagically transform SQL strings to work accross multi-database platform.
  
 ## What it is used for
- * It is used by programmers who would rather write SQL statements than use ORM that gets in their way.  
+ * It is used by programmers who would rather write SQL statements than use ORM that gets in their way.
+  
  
 
 
@@ -136,10 +137,16 @@ A SQL breakdown result:
 ```
 
     
+### Projects using it
+
+* [Ivanceras ORM](https://github.com/ivanceras/orm)
+
+> Take a look at the code in action [here](https://github.com/ivanceras/orm/blob/master/src/main/java/com/ivanceras/db/api/DB_Rdbms.java)
 
 
 
-link to previous HN comments submission
+
+### link to previous HN comments submission
 
 https://news.ycombinator.com/item?id=5956867
 
@@ -147,17 +154,20 @@ https://news.ycombinator.com/item?id=5956867
 
 #### More examples
 
-
 https://github.com/ivanceras/fluentsql/tree/master/src/test/java/com/ivanceras/fluent
 
 
 #### Similar Projects
 
-
 http://www.jooq.org/  ( This is polished but I wanted CAPSLOCK on the SQL keywords, also it automatically transform SQL statements for each platform )
 
 http://code.google.com/p/squiggle-sql/  ( ..uhmm.. poor choice of words.. )
 
-LICENSE: Apache2
+### License
+Apache2
 
-Tips? : 1CYj1jEjV4eWm5TLPRDD34hQbVuUHcGg9X
+### How can I help?
+* Bitcoin Tips : 1CYj1jEjV4eWm5TLPRDD34hQbVuUHcGg9X
+* [Fork me](https://github.com/ivanceras/fluentsql)
+* [Submit Issues, Suggestions](https://github.com/ivanceras/fluentsql/issues)
+
