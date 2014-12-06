@@ -698,7 +698,7 @@ public class SQL {
 		return keyword("<").FIELD(sql);
 	}
 	public SQL LESS_THAN_OR_EQUAL(Object value){
-		return keyword("<").EQUAL().VALUE(value);
+		return keyword("<=").VALUE(value);
 	}
 	public SQL LIMIT(int limit){
 		return keyword("LIMIT").keyword(limit+"");
