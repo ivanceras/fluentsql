@@ -20,10 +20,6 @@ public class SQL {
 	 */
 	public static class Statics{
 		
-		public static SQL instance(){
-			return new SQL();
-		}
-		
 		public static SQL WITH(){
 			return instance().WITH();
 		}
@@ -158,11 +154,42 @@ public class SQL {
 		public static SQL UPPER(String column){
 			return instance().UPPER(column);
 		}
+		
+		public static SQL SIN(SQL sql){
+			return instance().SIN(sql);
+		}
+		public static SQL COS(SQL sql){
+			return instance().COS(sql);
+		}
+		public static SQL TAN(SQL sql){
+			return instance().TAN(sql);
+		}
+		public static SQL ASIN(SQL sql){
+			return instance().ASIN(sql);
+		}
+		public static SQL ACOS(SQL sql){
+			return instance().ACOS(sql);
+		}
+		public static SQL ATAN(SQL sql){
+			return instance().ATAN(sql);
+		}
+		public static SQL DEGREES(SQL sql){
+			return instance().DEGREES(sql);
+		}
+		public static SQL RADIANS(SQL sql){
+			return instance().RADIANS(sql);
+		}
+		public static SQL VALUE(Object obj){
+			return instance().VALUE(obj);
+		}
+		public static SQL FIELD(String column){
+			return instance().FIELD(column);
+		}
 	}
 
 	
 	public SQL WITH(){
-		return keyword("WITH");
+		return ln().keyword("WITH");
 	}
 	
 	public SQL OVER() {
@@ -235,7 +262,7 @@ public class SQL {
 		return keyword("INSERT");
 	}
 
-	public SQL instance(){
+	public static SQL instance(){
 		return new SQL();
 	}
 	public SQL LOWER(SQL sql){
@@ -262,7 +289,7 @@ public class SQL {
 	}
 
 	public SQL SELECT(){
-		return keyword("SELECT");
+		return ln().keyword("SELECT");
 	}
 
 	public SQL SELECT(SQL arg){
@@ -531,7 +558,7 @@ public class SQL {
 				.ln();
 	}
 	public SQL FROM(){
-		return keyword("\n FROM");
+		return ln().keyword("FROM");
 	}
 
 	public SQL FROM(SQL sql){
@@ -641,7 +668,7 @@ public class SQL {
 	}
 
 	public SQL IN(SQL sql){
-		return keyword("\n IN").FIELD(sql);
+		return ln().keyword("IN").FIELD(sql);
 	}
 
 	public SQL INDEX(String indexName, String columns){
@@ -683,11 +710,11 @@ public class SQL {
 	}
 
 	public SQL LEFT_JOIN(String table){
-		return keyword("\n LEFT JOIN").FIELD(table).ln();
+		return ln().LEFT().JOIN().FIELD(table).ln();
 	}
 
 	public SQL LEFT_OUTER_JOIN(String table){
-		return keyword("\n LEFT OUTER JOIN").FIELD(table).ln();
+		return ln().LEFT().OUTER().JOIN().FIELD(table).ln();
 	}
 
 	public SQL LESS_THAN(Object value){
@@ -705,16 +732,27 @@ public class SQL {
 	}
 
 	public SQL ln(){
-//		return keyword("\n");
-		return this;
+		return keyword("\n");
+	}
+	
+	public SQL MATCH(){
+		return keyword("MATCH");
+	}
+	
+	public SQL FULL(){
+		return keyword("FULL");
 	}
 
+	public SQL SIMPLE(){
+		return keyword("SIMPLE");
+	}
+	
 	public SQL MATCH_FULL(){
-		return keyword("MATCH FULL").ln();
+		return MATCH().FULL().ln();
 	}
 
 	public SQL MATCH_SIMPLE(){
-		return keyword("MATCH SIMPLE").ln();
+		return MATCH().SIMPLE().ln();
 	}
 
 
@@ -757,18 +795,25 @@ public class SQL {
 		return keyword("OFFSET").keyword(offset+"");
 	}
 
+	public SQL ON(){
+		return ln().keyword("ON");
+	}
+	
 	public SQL ON(String column1){
-		return keyword("ON").FIELD(column1);
+		return ON().FIELD(column1);
 	}
 
 	public SQL ON(String column1, String column2){
-		return keyword("ON").FIELD(column1).EQUAL().FIELD(column2).ln();
+		return ON().FIELD(column1).EQUAL().FIELD(column2).ln();
 	}
 	public SQL ON_DELETE(){
-		return keyword("ON DELETE").ln();
+		return ON().DELETE();
+	}
+	public SQL UPDATE(){
+		return keyword("UPDATE");
 	}
 	public SQL ON_UPDATE(){
-		return keyword("ON UPDATE").ln();
+		return ON().UPDATE();
 	}
 	public SQL ONLY(){
 		return keyword("ONLY");
@@ -818,12 +863,31 @@ public class SQL {
 		return keyword("RETURNING").FIELD(column);
 	}
 
+	public SQL JOIN(){
+		return keyword("JOIN");
+	}
+	
+	public SQL OUTER(){
+		return keyword("OUTER");
+	}
+	public SQL INNER(){
+		return keyword("INNER");
+	}
+	
+	public SQL RIGHT(){
+		return keyword("RIGHT");
+	}
+	public SQL LEFT(){
+		return keyword("LEFT");
+	}
+	
+	
 	public SQL RIGHT_JOIN(String table){
-		return keyword("RIGHT JOIN").FIELD(table).ln();
+		return RIGHT().JOIN().FIELD(table).ln();
 	}
 
 	public SQL RIGHT_OUTER_JOIN(String table){
-		return keyword("RIGHT OUTER JOIN").FIELD(table).ln();
+		return RIGHT().OUTER().JOIN().FIELD(table).ln();
 	}
 
 	public SQL SCHEMA(){
@@ -935,7 +999,7 @@ public class SQL {
 
 
 	public SQL WHERE(){
-		return keyword("\n WHERE");
+		return ln().keyword("WHERE");
 	}
 
 	public SQL WHERE(SQL sql){
@@ -947,19 +1011,60 @@ public class SQL {
 	}
 
 	public SQL DEFERRABLE() {
-		return keyword("\n DEFERRABLE");
+		return ln().keyword("DEFERRABLE");
 	}
 	
 	public SQL INITIALLY_DEFERRED() {
 		return keyword("INITIALLY DEFERRED");
 	}
 	
+	
+	/**
+	 * Trigonometric Functions
+	 * @param sql
+	 * @return
+	 */
+	public SQL SIN(SQL sql) {
+		return FUNCTION("SIN",sql);
+	}
+	
+	public SQL COS(SQL sql) {
+		return FUNCTION("COS",sql);
+	}
+	public SQL TAN(SQL sql) {
+		return FUNCTION("TAN",sql);
+	}
+	public SQL SEC(SQL sql) {
+		return FUNCTION("SEC",sql);
+	}
+	
+	//arc
+	public SQL ASIN(SQL sql) {
+		return FUNCTION("ASIN",sql);
+	}
+	
+	public SQL ACOS(SQL sql) {
+		return FUNCTION("ACOS",sql);
+	}
+	public SQL ATAN(SQL sql) {
+		return FUNCTION("ATAN",sql);
+	}
+	public SQL ASEC(SQL sql) {
+		return FUNCTION("ASEC",sql);
+	}
+	
+	//degree, radians
+	public SQL DEGREES(SQL sql) {
+		return FUNCTION("DEGREES",sql);
+	}
+	public SQL RADIANS(SQL sql) {
+		return FUNCTION("RADIANS",sql);
+	}
+	
 	@Override
 	public String toString(){
 		return "SQL: keywords["+keywords.size()+"]";
 	}
-
-	
 
 	
 }
