@@ -167,7 +167,6 @@ http://code.google.com/p/squiggle-sql/  ( ..uhmm.. poor choice of words.. )
 Apache2
 
 ### How can I help?
-* Bitcoin Tips : 1CYj1jEjV4eWm5TLPRDD34hQbVuUHcGg9X
 * [Fork me](https://github.com/ivanceras/fluentsql)
 * [Submit Issues, Suggestions](https://github.com/ivanceras/fluentsql/issues)
 
